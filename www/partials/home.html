@@ -1,0 +1,31 @@
+<div class="jumbotron">
+    <div class="row-fluid">
+		<div class="span12">
+			<span class="text-muted">Total balance:</span> <span class="balance">{{data.total | number:4}}</span> doges
+		</div>
+		<div class="span12">
+			<span class="text-muted">That's about </span><span class="balance">{{currencySymbol(data.currency)}}{{data.convertedTotal | number:4}}</span> {{data.currency}} <span ng-show="data.convertedTotal" class="text-muted">(such {{data.suchWord}})!</span>
+		</div>
+	</div>
+    <div class="row-fluid">
+		<div class="span12">
+			<!-- ng-repeat... track by wallet.address avoid ngRepeat:dupes error -->
+			<div class="walletEntry" ng-repeat="wallet in data.wallets track by wallet.label + wallet.address">
+				<table class="table-balances">
+					<tr>
+						<td><strong>{{wallet.label}}</strong></td>
+					</tr>
+					<tr>
+						<td><span class="walletAddress">{{wallet.address}}</span></td>
+					</tr>
+					<tr>
+						<td>
+							<span ng-class="{balance: !wallet.error, error: wallet.error}" class="currency">{{wallet.balance | number:4}}</span> doges
+							<span ng-show="wallet.error" class="error" ng-bind="wallet.error"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

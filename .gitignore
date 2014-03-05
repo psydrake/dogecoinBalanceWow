@@ -1,0 +1,27 @@
+.classpath
+.settings/
+logs/*
+!.gitkeep
+node_modules/
+tmp
+.DS_Store
+*.pyc
+.idea/
+.project
+*.iml
+**/gen/*
+**/bin/*
+platforms/android/assets/www
+platforms/ios/www
+platforms/ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata/
+platforms/ios/KittehCoin\ Balance.xcodeproj/project.xcworkspace/
+platforms/ios/KittehCoin\ Balance.xcodeproj/project.pbxproj/
+console.log
+webapp/chrome.zip
+webapp/www/*
+platforms/wp8/www/
+obj/
+**/Bin/Debug/*
+*.suo
+*.user
+Thumbs.db
