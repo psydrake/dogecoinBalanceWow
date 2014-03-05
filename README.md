@@ -11,9 +11,9 @@ Dogecoin Balance Wow consists of two parts:
 The front end communicates with the back end via [JSONP](http://en.wikipedia.org/wiki/JSONP) calls. The backend polls cryptocoincharts.info every 10 minutes, and it stores this data in [memcache](https://developers.google.com/appengine/docs/python/memcache/) for all subsequent client requests, in order to reduce load on the CryptoCoinCharts server. Wallet balance lookups from the DogeChain [API](https://dogechain.info/chain/Dogecoin/q) occur on demand.
 
 ## Install On Your Device
-* [Dogecoin Balance Wow for Android](https://play.google.com/store/apps/details?id=net.edrake.kittehcoinbalance)
+* [Dogecoin Balance Wow for Android](https://play.google.com/store/apps/details?id=net.edrake.dogecoinbalancewow)
 * [Dogecoin Balance Wow for Amazon Kindle Fire](http://www.amazon.com/Drake-Emko-KittehCoin-Balance/dp/B00IQN7P74)
-* [Dogecoin Balance Wow for FirefoxOS](https://marketplace.firefox.com/app/kittehcoin-balance)
+* [Dogecoin Balance Wow for FirefoxOS](https://marketplace.firefox.com/app/dogecoin-balance-wow)
 * [Dogecoin Balance Wow in the Chrome Web Store](https://chrome.google.com/webstore/detail/dogecoin-balance-wow/mbldbbdmcmpelfakglhfafgiopeepnob)
 * [Dogecoin Balance Wow as a Web Site](http://d2kg4h6gsenx6a.cloudfront.net/main.html)
 
