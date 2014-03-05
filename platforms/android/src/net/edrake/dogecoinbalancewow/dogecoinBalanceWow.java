@@ -17,7 +17,7 @@
        under the License.
  */
 
-package net.edrake.kittehcoinbalance;
+package net.edrake.dogecoinbalancewow;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,7 +32,7 @@ import org.apache.cordova.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class kittehcoinBalance extends CordovaActivity {
+public class dogecoinBalanceWow extends CordovaActivity {
 
 	Timer timer;
 
