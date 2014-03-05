@@ -24,6 +24,10 @@
     <feature name="InAppBrowser">
         <param name="ios-package" value="CDVInAppBrowser" />
     </feature>
+    <name>KittehCoin Balance</name>
+    <description>
+		See how meowny KittehCoin you own and how much they’re worth.
+    </description>
     <name>Dogecoin Balance Wow</name>
     <description>
 		See how many Dogecoin you own and how much they're worth. Such richs!
