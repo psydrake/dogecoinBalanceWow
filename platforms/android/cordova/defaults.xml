@@ -13,9 +13,9 @@
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
-    <name>Litecoin Easy Check</name>
+    <name>Dogecoin Balance Wow</name>
     <description>
-		Check the market price of Litecoin. Simple and easy. Backend caches data from the CryptoCoinCharts.info API.
+		See how many Dogecoin you own and how much they're worth. Such richs!
     </description>
     <author email="drakee@gmail.com" href="https://github.com/psydrake">
         Drake Emko
