@@ -12,7 +12,7 @@ The front end communicates with the back end via [JSONP](http://en.wikipedia.org
 
 ## Install On Your Device
 * [Dogecoin Balance Wow for Android](https://play.google.com/store/apps/details?id=net.edrake.dogecoinbalancewow)
-* [Dogecoin Balance Wow for Amazon Kindle Fire](http://www.amazon.com/Drake-Emko-KittehCoin-Balance/dp/B00IQN7P74)
+* [Dogecoin Balance Wow for Amazon Kindle Fire](http://www.amazon.com/Drake-Emko-Dogecoin-Balance-Wow/dp/B00ISNBWEY)
 * [Dogecoin Balance Wow for FirefoxOS](https://marketplace.firefox.com/app/dogecoin-balance-wow)
 * [Dogecoin Balance Wow in the Chrome Web Store](https://chrome.google.com/webstore/detail/dogecoin-balance-wow/mbldbbdmcmpelfakglhfafgiopeepnob)
 * [Dogecoin Balance Wow as a Web Site](http://d2kg4h6gsenx6a.cloudfront.net/main.html)
