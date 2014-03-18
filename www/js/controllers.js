@@ -86,6 +86,8 @@ angular.module('app.controllers', []).
 				$location.path('/home');
 			}
 		}
+
+		customService.trackPage('/edit');
 	}).
     controller('homeController', function($scope, $rootScope, $location, $log, $timeout, blockexplorerAPIService, cryptocoinchartsAPIService, settingsService, customService, utilService) {
 		$scope.data = {
