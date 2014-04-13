@@ -54,7 +54,7 @@ def tradingDOGE(currency='BTC'):
     response.content_type = 'application/json; charset=utf-8'
 
     mReturn = '{}'
-    if (currency != 'EUR'):
+    if (currency not in ['EUR', 'USD']):
         dogeCurrency = json.loads(memcache.get('trading_DOGE_' + currency))
         if (not dogeCurrency):
             logging.warn('No data found in memcache for trading_DOGE_' + currency)
@@ -63,6 +63,7 @@ def tradingDOGE(currency='BTC'):
             mReturn = dogeCurrency['price']
     else:
         # For EUR, We have to convert from DOGE -> BTC -> EUR
+        # Update: For USD, We now have to do the same, since the price isn't accurate from the API we're using
         dogeBtc = json.loads(memcache.get('trading_DOGE_BTC'))
         if (not dogeBtc):
             logging.warn("No data found in memcache for trading_DOGE_BTC")
@@ -96,8 +97,9 @@ def pullTradingPair(currency1='DOGE', currency2='BTC'):
 def pullCryptocoinchartsData():
     pullTradingPair('DOGE', 'BTC')
     pullTradingPair('DOGE', 'CNY')
-    pullTradingPair('DOGE', 'USD')
+    #pullTradingPair('DOGE', 'USD')
     pullTradingPair('BTC', 'EUR')
+    pullTradingPair('BTC', 'USD')
     return "Done"
 
 @bottle.error(404)
