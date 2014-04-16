@@ -252,6 +252,9 @@
         <Content Include="www\css\bootstrap.min.css" />
     </ItemGroup>
     <ItemGroup>
+        <Content Include="www\css\custom.css" />
+    </ItemGroup>
+    <ItemGroup>
         <Content Include="www\css\index.css" />
     </ItemGroup>
     <ItemGroup>
