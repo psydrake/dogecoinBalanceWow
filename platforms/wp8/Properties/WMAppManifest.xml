@@ -4,7 +4,7 @@
     <Languages xmlns="">
         <Language code="en-US" />
     </Languages>
-    <App Author="Drake Emko" BitsPerPixel="32" Description="See how meowny KittehCoin you own and how much they're worth." Genre="apps.normal" ProductID="{a887a769-3cde-4b85-a3db-b6f4008ed9df}" Publisher="KittehCoin Balance" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="KittehCoin Balance" Version="1.0" xmlns="">
+    <App Author="Dogecoin Balance Wow Author" BitsPerPixel="32" Description="See how meowny KittehCoin you own and how much they're worth." Genre="apps.normal" ProductID="{a887a769-3cde-4b85-a3db-b6f4008ed9df}" Publisher="Dogecoin Balance Wow Publisher" PublisherID="{db093ed5-53b1-45f7-af72-751e8f36ab80}" RuntimeType="Silverlight" Title="Dogecoin Balance Wow" Version="1.0" xmlns="">
         <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
         <Capabilities>
             <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
@@ -14,7 +14,7 @@
             <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
         </Tasks>
         <Tokens>
-            <PrimaryToken TaskName="_default" TokenID="KittehCoin BalanceToken">
+            <PrimaryToken TaskName="_default" TokenID="Dogecoin Balance Wow">
                 <TemplateFlip>
                     <SmallImageURI IsRelative="true" IsResource="false">tileSmall.png</SmallImageURI>
                     <Count>0</Count>
