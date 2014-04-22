@@ -14,7 +14,7 @@ The front end communicates with the back end via [JSONP](http://en.wikipedia.org
 * [Android](https://play.google.com/store/apps/details?id=net.edrake.dogecoinbalancewow)
 * [Amazon Kindle Fire](http://www.amazon.com/Drake-Emko-Dogecoin-Balance-Wow/dp/B00ISNBWEY)
 * [Windows Phone](http://www.windowsphone.com/en-us/store/app/dogecoin-balance-wow/9e343cb7-3552-4f7f-9d88-0a0d87c05848)
-* [Blackberry 10](http://appworld.blackberry.com/webstore/content/53031888/?lang=en)
+* [Blackberry 10](http://appworld.blackberry.com/webstore/content/53031888/)
 * [FirefoxOS](https://marketplace.firefox.com/app/dogecoin-balance-wow)
 * [Chrome Web Store](https://chrome.google.com/webstore/detail/dogecoin-balance-wow/mbldbbdmcmpelfakglhfafgiopeepnob)
 * [Browse As A Web Site](http://d2kg4h6gsenx6a.cloudfront.net/main.html)
