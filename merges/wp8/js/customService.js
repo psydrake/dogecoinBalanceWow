@@ -1,6 +1,6 @@
 // platform-specific service
 angular.module('app.customService', []).
-    factory('customService', function($timeout) {
+    factory('customService', function() {
         return {
 			openLink: function(link) {
 				// Use in-app browser for WP8

@@ -28,7 +28,7 @@ angular.module('app.controllers', []).
 
 		customService.trackPage('/add');
     }).
-	controller('editController', function($scope, $location, $log, settingsService, utilService) {
+	controller('editController', function($scope, $location, $log, settingsService, utilService, customService) {
 		$scope.wallets = settingsService.getObject('wallets');
 
 		$scope.cancel = function() {
