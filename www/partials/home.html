@@ -1,4 +1,4 @@
-<div class="jumbotron">
+<div class="jumbotron" ng-swipe-left="goto('edit')">
     <div class="row-fluid">
 		<div class="span12">
 			<span class="text-muted">Total balance:</span> <span class="balance">{{data.total | number:4}}</span> doges
@@ -13,13 +13,13 @@
 			<div class="walletEntry" ng-repeat="wallet in data.wallets track by wallet.label + wallet.address">
 				<table class="table-balances">
 					<tr>
-						<td><strong>{{wallet.label}}</strong></td>
+						<td style="text-align:left"><strong>{{wallet.label}}</strong></td>
 					</tr>
 					<tr>
-						<td><span class="walletAddress">{{wallet.address}}</span></td>
+						<td style="text-align:left"><span class="walletAddress">{{wallet.address}}</span></td>
 					</tr>
 					<tr>
-						<td>
+						<td style="text-align:left">
 							<span ng-class="{balance: !wallet.error, error: wallet.error}" class="currency">{{wallet.balance | number:4}}</span> doges
 							<span ng-show="wallet.error" class="error" ng-bind="wallet.error"></span>
 						</td>
