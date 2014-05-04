@@ -96,7 +96,9 @@ angular.module('app.controllers', []).
 			currency: settingsService.getValue('preferredCurrency'),
 			wallets: settingsService.getObject('wallets'),
 			suchWord: utilService.getSuchWord(),
-			loadCount: 0
+			loadCount: 0,
+			price: 0, // current price in selected non-doge currency
+			btcPrice: 0 // current price in BTC
 		};
 
 		if (!$scope.data.wallets || $scope.data.wallets.length === 0) {
@@ -121,9 +123,12 @@ angular.module('app.controllers', []).
 					$log.info('balance for', wallet.address, 'is', wallet.balance);
 					$scope.data.total += wallet.balance;
 
-					cryptocoinchartsAPIService.convert($scope.data.currency, wallet.balance).success(function(price) {
-						$scope.data.convertedTotal += Number(price);
+					cryptocoinchartsAPIService.convert($scope.data.currency, wallet.balance).success(function(total, price, btcPrice) {
+						$log.info('total:', total, ', price:', price, ', btcPrice:', btcPrice);
+						$scope.data.convertedTotal += Number(total);
 						$scope.data.loadCount -= 1; // when loadCount reaches 0, we are done
+						$scope.data.price = price;
+						$scope.data.btcPrice = btcPrice;
 					});
 				});
 			});

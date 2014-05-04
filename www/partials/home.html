@@ -28,4 +28,12 @@
 			</div>
 		</div>
 	</div>
+	<div class="row-fluid">
+		<div class="span12" ng-if="data.price && data.btcPrice">
+			<span class="text-muted">1 doge</span>
+			<span ng-if="data.currency !== 'BTC'">~</span>
+			<span ng-if="data.currency !== 'BTC'" class="text-muted">{{currencySymbol(data.currency)}}{{data.price | number:6}}</span>
+			~ <span class="text-muted">{{currencySymbol('BTC')}}{{data.btcPrice | number:8}}</span>
+		</div>
+	</div>
 </div>
