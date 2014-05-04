@@ -6,6 +6,7 @@ var app = angular.module('app', [
         'app.services',
         'app.customService',
         'ngRoute',
+		'ngTouch',
         'ui.bootstrap'
     ]).
 	config(['$routeProvider', function($routeProvider) {
