@@ -16,6 +16,7 @@ platforms/ios/www
 platforms/ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata/
 platforms/ios/Dogecoin\ Balance\ Wow.xcodeproj/project.xcworkspace/
 platforms/ios/Dogecoin\ Balance\ Wow.xcodeproj/project.pbxproj/
+platforms/wp8/Bin
 console.log
 webapp/chrome.zip
 webapp/www/*
