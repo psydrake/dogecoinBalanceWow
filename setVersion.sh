@@ -14,6 +14,7 @@ VERSION_CODE=5
 perl -pi -e "s/\sversion=\"\d+\.\d+\"\s/\ version=\"${VERSION}\"\ /" www/config.xml
 perl -pi -e "s/return\s\'\d+\.\d+\.\d+\'\;/return\ \'${VERSION}\.${VERSION_CODE}\'\;/" www/js/services.js 
 perl -pi -e "s/android\:versionCode=\"\d+\"/android\:versionCode=\"${VERSION_CODE}\"/" platforms/android/AndroidManifest.xml
+perl -pi -e "s/android\:versionCode=\"NaN\"/android\:versionCode=\"${VERSION_CODE}\"/" platforms/android/AndroidManifest.xml
 perl -pi -e "s/version\=\"\d+.\d+\"/version\=\"${VERSION}\"/" platforms/android/cordova/defaults.xml
 perl -pi -e "s/\"version\"\:\ \"\d+\.\d+\.\d+\"/\"version\"\:\ \"${VERSION}\.${VERSION_CODE}\"/" webapp/chrome/manifest.json
 perl -pi -e "s/\"version\"\:\ \"\d+\.\d+\.\d+\"/\"version\"\:\ \"${VERSION}\.${VERSION_CODE}\"/" webapp/merges/manifest.webapp
