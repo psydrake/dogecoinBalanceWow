@@ -98,7 +98,8 @@ angular.module('app.controllers', []).
 			suchWord: utilService.getSuchWord(),
 			loadCount: 0,
 			price: 0, // current price in selected non-doge currency
-			btcPrice: 0 // current price in BTC
+			btcPrice: 0, // current price in BTC
+			error: ''
 		};
 
 		if (!$scope.data.wallets || $scope.data.wallets.length === 0) {
@@ -113,17 +114,21 @@ angular.module('app.controllers', []).
 			$scope.data.total = 0;
 			$scope.data.convertedTotal = 0;
 
+			$scope.data.error = '';
 			angular.forEach($scope.data.wallets, function(wallet) {
 				delete wallet.error;
 				blockexplorerAPIService.getBalance(wallet.address).success(function (balance, isError) {
 					if (isError) {
-						wallet.error = 'Error - is wallet address correct?';
+						wallet.error = 'Error - wallet address incorrect or blockchain explorer down?';
 					}
 					wallet.balance = Number(balance);
 					$log.info('balance for', wallet.address, 'is', wallet.balance);
 					$scope.data.total += wallet.balance;
 
-					cryptocoinchartsAPIService.convert($scope.data.currency, wallet.balance).success(function(total, price, btcPrice) {
+					cryptocoinchartsAPIService.convert($scope.data.currency, wallet.balance).success(function(total, price, btcPrice, isError) {
+						if (isError) {
+							$scope.data.error = 'Error retrieving exchange rate data';
+						}
 						$log.info('total:', total, ', price:', price, ', btcPrice:', btcPrice);
 						$scope.data.convertedTotal += Number(total);
 						$scope.data.loadCount -= 1; // when loadCount reaches 0, we are done
@@ -165,11 +170,21 @@ angular.module('app.controllers', []).
 
 		customService.trackPage('/settings');
     }).
-    controller('aboutController', function($scope, utilService, customService) {
+    controller('aboutController', function($scope, $timeout, utilService, customService) {
 		$scope.data = {version: utilService.getAppVersion()};
+		$scope.showLogo1 = true; // there are two logos that we alternate between
+		$scope.LOGO_TIMEOUT = 10000; // time in milliseconds for each logo to display
+
+		$scope.toggleLogo = function() {
+			$scope.showLogo1 = !$scope.showLogo1;
+			$timeout(function() {
+				$scope.toggleLogo();
+			}, $scope.LOGO_TIMEOUT);
+		}
+
+		$timeout(function() {
+			$scope.toggleLogo();
+		}, $scope.LOGO_TIMEOUT);
 
 		customService.trackPage('/about');
     });
-
-
-

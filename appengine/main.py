@@ -96,8 +96,8 @@ def pullTradingPair(currency1='DOGE', currency2='BTC'):
 @bottle.route('/tasks/pull-cryptocoincharts-data')
 def pullCryptocoinchartsData():
     pullTradingPair('DOGE', 'BTC')
+    pullTradingPair('DOGE', 'LTC')
     pullTradingPair('DOGE', 'CNY')
-    #pullTradingPair('DOGE', 'USD')
     pullTradingPair('BTC', 'EUR')
     pullTradingPair('BTC', 'USD')
     return "Done"
