@@ -14,8 +14,9 @@ from decimal import *
 from server.controllers import RESOURCE_NAME_controller
 
 BLOCKEXPLORER_URL = 'http://dogechain.info/chain/Dogecoin/q/addressbalance/'
+BLOCKEXPLORER_URL_BACKUP = 'https://chain.so/api/v2/get_address_balance/doge/'
 TRADING_PAIR_URL = 'http://www.cryptocoincharts.info/v2/api/tradingPair/'
-TIMEOUT_DEADLINE = 30 # seconds
+TIMEOUT_DEADLINE = 10 # seconds
 
 # Run the Bottle wsgi application. We don't need to call run() since our
 # application is embedded within an App Engine WSGI application server.
@@ -34,12 +35,33 @@ def home():
 def getBalance(address=''):
     response.content_type = 'application/json; charset=utf-8'
 
-    #data = urllib2.urlopen(BLOCKEXPLORER_URL + address)
-    data = urlfetch.fetch(BLOCKEXPLORER_URL + address, deadline=TIMEOUT_DEADLINE)
-    dataDict = json.loads(data.content)
-    balance = json.dumps(dataDict)
+    url = BLOCKEXPLORER_URL + address
+    data = None
+    useBackupUrl = False
 
+    try:
+        data = urlfetch.fetch(url, deadline=TIMEOUT_DEADLINE)
+        if (not data or not data.content or data.status_code != 200):
+            logging.warn('No content returned from ' + url)
+            useBackupUrl = True
+    except:
+        logging.warn('Error retrieving ' + url)
+        useBackupUrl = True
+
+    if (useBackupUrl):
+        backupUrl = BLOCKEXPLORER_URL_BACKUP + address
+        logging.warn('Now trying ' + backupUrl)
+        data = urlfetch.fetch(backupUrl, deadline=TIMEOUT_DEADLINE)
+
+    dataDict = json.loads(data.content)
+    if (useBackupUrl):
+        # backupUrl uses a different format (JSON) to present data
+        dataDict = dataDict['data']['confirmed_balance']
+        logging.info('Parsed balance from backup url: ' + str(dataDict))
+
+    balance = json.dumps(dataDict).strip('"')
     mReturn = balance
+
     query = request.query.decode()
     if (len(query) > 0):
         mReturn = query['callback'] + '({balance:' + balance + '})'
