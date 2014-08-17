@@ -19,8 +19,9 @@ TRADING_PAIR_URL = 'http://www.cryptocoincharts.info/v2/api/tradingPair/'
 TRADING_PAIR_URL_BTC_BACKUP="https://api.mintpal.com/v1/market/stats/DOGE/"
 TRADING_PAIR_URL_USD_BACKUP = 'https://coinbase.com/api/v1/prices/buy' 
 # TRADING_PAIR_URL_FIAT_BACKUP = 'http://api.bitcoincharts.com/v1/markets.json'
+BTCAVERAGE_URL = 'https://api.bitcoinaverage.com/ticker/' # used for BTC / GBP, AUD
 
-TIMEOUT_DEADLINE = 10 # seconds
+TIMEOUT_DEADLINE = 12 # seconds
 
 # Run the Bottle wsgi application. We don't need to call run() since our
 # application is embedded within an App Engine WSGI application server.
@@ -80,7 +81,7 @@ def tradingDOGE(currency='BTC'):
     response.content_type = 'application/json; charset=utf-8'
 
     mReturn = '{}'
-    if (currency not in ['EUR', 'USD']):
+    if (currency not in ['EUR', 'USD', 'GBP', 'AUD']):
         dogeCurrency = json.loads(memcache.get('trading_DOGE_' + currency))
         if (not dogeCurrency):
             logging.warn('No data found in memcache for trading_DOGE_' + currency)
@@ -88,8 +89,7 @@ def tradingDOGE(currency='BTC'):
         else:
             mReturn = dogeCurrency['price']
     else:
-        # For EUR, We have to convert from DOGE -> BTC -> EUR
-        # Update: For USD, We now have to do the same, since the price isn't accurate from the API we're using
+        # For EUR, GBP, and USD We have to convert from DOGE -> BTC -> FIAT
         dogeBtc = json.loads(memcache.get('trading_DOGE_BTC'))
         if (not dogeBtc):
             logging.warn("No data found in memcache for trading_DOGE_BTC")
@@ -111,7 +111,7 @@ def tradingDOGE(currency='BTC'):
     return str(mReturn)
 
 def pullTradingPair(currency1='DOGE', currency2='BTC'):
-    url = TRADING_PAIR_URL + currency1 + '_' + currency2
+    url = BTCAVERAGE_URL + currency2 + '/' if currency2 in ['AUD', 'GBP'] else TRADING_PAIR_URL + currency1 + '_' + currency2
     data = None
     useBackupUrl = False
 
@@ -138,6 +138,10 @@ def pullTradingPair(currency1='DOGE', currency2='BTC'):
             return
 
     dataDict = json.loads(data.content)
+    if (currency1 == 'BTC' and currency2 in ['AUD', 'GBP']):
+        # standardize format of exchange rate data from different APIs (we will use 'price' as a key)
+        dataDict['price'] = dataDict['last'] 
+
     if (useBackupUrl):
         if (currency1 == 'DOGE' and currency2 == 'BTC'):
             dataDict = {'price': dataDict[0]['last_price']}
@@ -147,7 +151,7 @@ def pullTradingPair(currency1='DOGE', currency2='BTC'):
             else:
                 logger.error('Unexpected JSON returned from URL ' + TRADING_PAIR_URL_USD_BACKUP)
         else:
-            logger.error('Should never get here')
+            logger.error('Error loading trading pair from ' + url)
 
     tradingData = json.dumps(dataDict).strip('"')
     memcache.set('trading_' + currency1 + '_' + currency2, tradingData)
@@ -160,6 +164,8 @@ def pullCryptocoinchartsData():
     pullTradingPair('DOGE', 'LTC')
     pullTradingPair('DOGE', 'CNY')
     pullTradingPair('BTC', 'EUR')
+    pullTradingPair('BTC', 'GBP')
+    #pullTradingPair('BTC', 'AUD')
     return "Done"
 
 @bottle.error(404)
