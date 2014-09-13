@@ -150,8 +150,9 @@ def pullTradingPair(currency1='DOGE', currency2='BTC'):
         if (currency1 == 'DOGE' and currency2 == 'BTC'):
             dataDict = {'price': dataDict[0]['last_price']}
         elif (currency1 == 'BTC' and currency2 == 'LTC'):
-            price = Decimal(1) / Decimal(dataDict['last'])
+            price = str(Decimal(1) / Decimal(dataDict['last']))
             dataDict = {'price': price}
+            logging.info('BTC_LTC: ' + price)
         elif (currency1 == 'BTC' and currency2 == 'USD'):
             if (dataDict['subtotal']['currency'] == 'USD'):
                 dataDict = {'price': dataDict['subtotal']['amount']}
@@ -167,10 +168,10 @@ def pullTradingPair(currency1='DOGE', currency2='BTC'):
 @bottle.route('/tasks/pull-cryptocoincharts-data')
 def pullCryptocoinchartsData():
     pullTradingPair('DOGE', 'BTC')
-    pullTradingPair('BTC', 'CNY')
     pullTradingPair('BTC', 'USD')
     pullTradingPair('BTC', 'EUR')
     pullTradingPair('BTC', 'GBP')
+    pullTradingPair('BTC', 'CNY')
     pullTradingPair('BTC', 'LTC')
     #pullTradingPair('BTC', 'AUD')
     return "Done"
