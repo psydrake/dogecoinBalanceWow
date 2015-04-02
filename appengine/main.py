@@ -16,7 +16,7 @@ from server.controllers import RESOURCE_NAME_controller
 BLOCKEXPLORER_URL = 'http://dogechain.info/chain/Dogecoin/q/addressbalance/'
 BLOCKEXPLORER_URL_BACKUP = 'https://chain.so/api/v2/get_address_balance/doge/'
 TRADING_PAIR_URL = 'http://api.cryptocoincharts.info/tradingPair/'
-TRADING_PAIR_URL_BTC_BACKUP="https://api.mintpal.com/v1/market/stats/DOGE/"
+#TRADING_PAIR_URL_BTC_BACKUP="https://api.mintpal.com/v1/market/stats/DOGE/"
 TRADING_PAIR_URL_BTC_BACKUP2 = 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=132'
 TRADING_PAIR_URL_LTC_BACKUP2 = 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=135'
 TRADING_PAIR_URL_USD_BACKUP = 'https://coinbase.com/api/v1/prices/buy' 
@@ -131,8 +131,10 @@ def pullTradingPair(currency1='DOGE', currency2='BTC'):
     useBackup2Url = False
     if (useBackupUrl):
         backupUrl = ''
+        #if (currency1 == 'DOGE' and currency2 == 'BTC'):
+        #    backupUrl = TRADING_PAIR_URL_BTC_BACKUP + currency2
         if (currency1 == 'DOGE' and currency2 == 'BTC'):
-            backupUrl = TRADING_PAIR_URL_BTC_BACKUP + currency2
+            backupUrl = TRADING_PAIR_URL_BTC_BACKUP2 
         elif (currency1 == 'BTC' and currency2 == 'LTC'):
             backupUrl = BTER_LTC_BTC_URL
         elif (currency1 == 'BTC' and currency2 == 'USD'):
