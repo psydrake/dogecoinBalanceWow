@@ -22,8 +22,6 @@ BTER_LTC_BTC_URL = 'http://data.bter.com/api/1/ticker/ltc_btc'
 TIMEOUT_DEADLINE = 10 # seconds
 
 def bitcoinaverage_ticker(currency):
-  #secret_key = '***REMOVED***'
-  #public_key = '***REMOVED***'
   timestamp = int(time.time())
   payload = '{}.{}'.format(timestamp, config.bitcoinaverage_public_key)
   hex_hash = hmac.new(config.bitcoinaverage_secret_key.encode(), msg=payload.encode(), digestmod=hashlib.sha256).hexdigest()
