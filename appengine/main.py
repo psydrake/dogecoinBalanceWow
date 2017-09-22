@@ -17,7 +17,6 @@ import config # this file contains secret API key(s), and so it is in .gitignore
 
 BLOCKEXPLORER_URL = 'http://dogechain.info/chain/Dogecoin/q/addressbalance/'
 BLOCKEXPLORER_URL_BACKUP = 'https://chain.so/api/v2/get_address_balance/doge/'
-CCC_TRADE_PAIR_URL = 'http://api.cryptocoincharts.info/tradingPair/'
 BTER_LTC_BTC_URL = 'http://data.bter.com/api/1/ticker/ltc_btc'
 TIMEOUT_DEADLINE = 10 # seconds
 
@@ -30,6 +29,10 @@ def bitcoinaverage_ticker(currency):
   url = 'https://apiv2.bitcoinaverage.com/indices/global/ticker/BTC' + currency
   headers = {'X-Signature': signature}
   return urlfetch.fetch(url, headers=headers, deadline=TIMEOUT_DEADLINE)
+
+def cryptopia_ticker(currency1, currency2):
+  url = 'https://www.cryptopia.co.nz/api/GetMarket/' + currency1 + '_' + currency2
+  return urlfetch.fetch(url, deadline=TIMEOUT_DEADLINE)
 
 # Run the Bottle wsgi application. We don't need to call run() since our
 # application is embedded within an App Engine WSGI application server.
@@ -47,28 +50,28 @@ def home():
 @bottle.route('/api/balance/<address:re:[a-zA-Z0-9]+>')
 def getBalance(address=''):
   response.content_type = 'application/json; charset=utf-8'
-
-  url = BLOCKEXPLORER_URL + address
   data = None
   useBackupUrl = False
 
+  url = BLOCKEXPLORER_URL + address
   try:
     data = urlfetch.fetch(url, deadline=TIMEOUT_DEADLINE)
     if (not data or not data.content or data.status_code != 200):
       logging.warn('No content returned from ' + url)
       useBackupUrl = True
+    else:
+      dataDict = json.loads(data.content)
+
   except Exception as e:
-    logging.warn("Error {0} retrieving data: {1}".format(e.errno, e.strerror))
+    logging.warn("Error: {0} retrieving data from {1}".format(e, url))
     useBackupUrl = True
 
   if (useBackupUrl):
-    backupUrl = BLOCKEXPLORER_URL_BACKUP + address
-    logging.warn('Now trying ' + backupUrl)
-    data = urlfetch.fetch(backupUrl, deadline=TIMEOUT_DEADLINE)
+    url = BLOCKEXPLORER_URL_BACKUP + address
+    logging.warn('Now trying ' + url)
+    data = urlfetch.fetch(url, deadline=TIMEOUT_DEADLINE)
 
-  dataDict = json.loads(data.content)
-  if (useBackupUrl):
-    # backupUrl uses a different format (JSON) to present data
+    dataDict = json.loads(data.content)
     dataDict = dataDict['data']['confirmed_balance']
     logging.info('Parsed balance from backup url: ' + str(dataDict))
 
@@ -119,78 +122,45 @@ def tradingDOGE(currency='BTC'):
   return str(mReturn)
 
 def trading_pair_data(currency1, currency2):
-  data = None
-  useBackupUrl = False
+  dataDict = None
 
   try:
-    if currency2 in ['CNY', 'EUR', 'GBP', 'USD', 'AUD']:
+    if currency2 in ['CNY', 'EUR', 'GBP', 'USD']:
       data = bitcoinaverage_ticker(currency2)
-    else:
-      data = urlfetch.fetch(CCC_TRADE_PAIR_URL + currency1 + '_' + currency2, deadline=TIMEOUT_DEADLINE)
-  except:
-    logging.warn('Error retrieving ' + url)
-    useBackupUrl = True
-  finally:
-    if (not useBackupUrl and (not data or not data.content or data.status_code != 200)):
-      logging.warn('No content returned from ' + url)
-      useBackupUrl = True
-
-  return data, useBackupUrl
-
-def trading_pair_data_fallback(currency1, currency2):
-  data = None
-  fallbackUrl = ''
-
-  if (currency1 == 'BTC' and currency2 == 'LTC'):
-    fallbackUrl = BTER_LTC_BTC_URL
-  else:
-    logging.error('Cannot get trading pair for ' + currency1 + ' / ' + currency2)
-    return data, fallbackUrl, False
-
-  logging.warn('Now trying ' + fallbackUrl + ' for trading pair for ' + currency1 + ' / ' + currency2)
-  try:
-    data = urlfetch.fetch(fallbackUrl, deadline=TIMEOUT_DEADLINE)
-    if (not data or not data.content or data.status_code != 200):
-      logging.error('No content returned from ' + fallbackUrl)
-      return data, fallbackUrl, False
-  except:
-    logging.error('Error retrieving ' + fallbackUrl)
-    return data, fallbackUrl, False
-
-  return data, fallbackUrl, True
-
-def load_data_dict(currency1, currency2, data, useFallbackUrl):
-  dataDict = json.loads(data.content)
-
-  if (currency1 == 'BTC' and currency2 in ['CNY', 'EUR', 'GBP', 'USD', 'AUD']):
-    # standardize format of exchange rate data from different APIs (we will use 'price' as a key)
-    dataDict['price'] = dataDict['last']
-  elif (useFallbackUrl):
-    if (currency1 == 'DOGE' and currency2 == 'BTC'):
-      dataDict = {'price': dataDict[0]['last_price']}
-    elif (currency1 == 'BTC' and currency2 == 'LTC'):
-      price = str(Decimal(1) / Decimal(dataDict['last']))
-      dataDict = {'price': price}
-      logging.info('BTC_LTC: ' + price)
-    elif (currency1 == 'BTC' and currency2 == 'USD'):
-      if (dataDict['subtotal']['currency'] == 'USD'):
-        dataDict = {'price': dataDict['subtotal']['amount']}
+      if (not data or not data.content or data.status_code != 200):
+        logging.error('No content returned for ' + currency1 + '_' + currency2)
+        return None
       else:
-        logging.error('Unexpected JSON returned: ' + str(dataDict))
-  else:
-    logging.error('Error loading trading pair: ' + currency1 + '_' + currency2)
+        dataDict = json.loads(data.content)
+        dataDict['price'] = dataDict['last']
+    elif (currency1 == 'BTC' and currency2 == 'LTC'):
+      data = urlfetch.fetch(BTER_LTC_BTC_URL, deadline=TIMEOUT_DEADLINE)
+      if (not data or not data.content or data.status_code != 200):
+        logging.error('No content returned from ' + BTER_LTC_BTC_URL)
+        return None
+      else:
+        dataDict = json.loads(data.content)
+        price = str(Decimal(1) / Decimal(dataDict['last']))
+        dataDict['price'] = price
+    else:
+      data = cryptopia_ticker(currency1, currency2)
+      if (not data or not data.content or data.status_code != 200):
+        logging.error('No content returned for ' + currency1 + '_' + currency2)
+        return None
+      else:
+        dataDict = json.loads(data.content)
+        dataDict['price'] = dataDict['Data']['LastPrice']
+
+  except Exception as e:
+    logging.error("Error {0} retrieving data for trading pair {1}_{2}".format(e, currency1, currency2))
+    return None
 
   return dataDict
 
 def pullTradingPair(currency1='DOGE', currency2='BTC'):
-  data, useFallbackUrl = trading_pair_data(currency1, currency2)
-
-  if useFallbackUrl:
-    data, fallbackUrl, success = trading_pair_data_fallback(currency1, currency2)
-    if not success:
-      return
-
-  dataDict = load_data_dict(currency1, currency2, data, useFallbackUrl)
+  dataDict = trading_pair_data(currency1, currency2)
+  if not dataDict:
+    return
 
   tradingData = json.dumps(dataDict).strip('"')
   memcache.set('trading_' + currency1 + '_' + currency2, tradingData)
